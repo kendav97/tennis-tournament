@@ -1,0 +1,68 @@
+services:
+  app:
+    build:
+      context: ./
+      dockerfile: ./docker-compose/Dockerfile
+    image: tennis-tournament
+    container_name: tennis-tournament-app
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./docker-compose/php/php.ini:/usr/local/etc/php/conf.d/php.ini
+      - ./:/var/www/
+    networks:
+      - tennis-tournament
+
+  db:
+    image: mysql:lts
+    container_name: tennis-tournament-db
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - tennis-tournament
+
+  db-test:
+    image: mysql:lts
+    container_name: tennis-tournament-db-test
+    restart: unless-stopped
+    ports:
+      - 3307:3306
+    environment:
+      MYSQL_DATABASE: tennis-tournament-test
+      MYSQL_ROOT_PASSWORD: admin
+      MYSQL_PASSWORD: admin
+      MYSQL_USER: admin
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - tennis-tournament
+
+  nginx:
+    image: nginx:alpine
+    container_name: tennis-tournament-nginx
+    restart: unless-stopped
+    ports:
+      - 8000:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - tennis-tournament
+
+networks:
+  tennis-tournament:
+    driver: bridge
+
+volumes:
+  dbdata:
+    driver: local
