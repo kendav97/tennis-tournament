@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\GameController;
+use App\Http\Controllers\GameConsoleController;
 use Illuminate\Console\Command;
 
 class ResetGame extends Command
@@ -24,12 +24,8 @@ class ResetGame extends Command
     /**
      * Execute the console command.
      */
-    public function handle(GameController $gameController)
+    public function handle(GameConsoleController $gameController)
     {
-        $gameController->reset();
-
-        $this->info("Game reseted successfully");
-        
-        return Command::SUCCESS;
+        return $gameController->reset($this);
     }
 }

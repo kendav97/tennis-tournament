@@ -2,9 +2,8 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\ParticipantController;
+use App\Http\Controllers\ParticipantConsoleController;
 use Illuminate\Console\Command;
-use App\Models\Participant;
 
 class ClearParticipant extends Command
 {
@@ -25,18 +24,8 @@ class ClearParticipant extends Command
     /**
      * Execute the console command.
      */
-    public function handle(ParticipantController $participantController)
+    public function handle(ParticipantConsoleController $participantController)
     {
-        $confirm = $this->confirm('Are you sure you want to delete all participants?');   
-
-        if ($confirm) {
-            $participantController->clear();
-
-            $this->info('All participants deleted successfully');
-            return Command::SUCCESS;
-        }
-
-        $this->info('No changes have been made to the database');
-        return Command::SUCCESS;
+        return $participantController->clear($this);
     }
 }

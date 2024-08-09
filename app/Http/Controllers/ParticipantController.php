@@ -5,12 +5,16 @@ namespace App\Http\Controllers;
 use App\Models\Participant;
 use App\Http\Helpers\NumericHelper;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ParticipantController extends Controller
 {
-    const SEED_NUMBER_OPTIONS = 6;
+    public function __construct(
+        protected Participant $participant
+    )
+    {}
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $request->validate([
             'per_page' => 'integer|min:1',
@@ -21,30 +25,30 @@ class ParticipantController extends Controller
         $perPage = $request->per_page ?? static::DEFAULT_PAGINATE;
 
         if ($request->has('page') && !$request->has('offset')) {
-            $participants = Participant::paginate($perPage, ['*'], 'page', $request->page);
+            $participants = $this->participant::paginate($perPage, ['*'], 'page', $request->page);
         } elseif ($request->has('offset') && !$request->has('page')) {
-            $participants = Participant::skip($request->offset)->take($perPage)->get();
+            $participants = $this->participant::skip($request->offset)->take($perPage)->get();
         } else {
-            $participants = Participant::paginate($perPage);
+            $participants = $this->participant::paginate($perPage);
         }
 
         return response()->json($participants);
     }
 
-    public function create(Request $request)
+    public function create(Request $request): JsonResponse
     {
-        $min_max = implode(',', [Participant::MIN_SCORE, Participant::MAX_SCORE]);
+        $min_max = implode(',', [$this->participant::MIN_SCORE, $this->participant::MAX_SCORE]);
         $validatedData = $request->validate([
             'name' => 'required|string',
-            'hability' => 'required|integer|between:'.$min_max,
-            'force' => 'required|integer|between:'.$min_max,
+            'skill' => 'required|integer|between:'.$min_max,
+            'strength' => 'required|integer|between:'.$min_max,
             'speed' => 'required|integer|between:'.$min_max,
             'reaction' => 'required|integer|between:'.$min_max,
         ]);
 
-        $validatedData['is_defeated'] = Participant::IS_NOT_DEFEATED;
+        $validatedData['is_defeated'] = $this->participant::IS_NOT_DEFEATED;
 
-        $participant = Participant::create($validatedData);
+        $participant = $this->participant::create($validatedData);
 
         return response()->json([
             'success' => true,
@@ -53,21 +57,14 @@ class ParticipantController extends Controller
         ], 201);
     }
 
-    public function seed($quantity)
+    public function seed(Request $request): JsonResponse
     {
-        $participant = new Participant();
-
-        $participant->autoAdd($quantity);
-    }
-
-    public function requestSeed(Request $request)
-    {
-        $accept_values = NumericHelper::generatePowersOfTwo(self::SEED_NUMBER_OPTIONS);
+        $accept_values = NumericHelper::generatePowersOfTwo($this->participant::SEED_NUMBER_OPTIONS);
         $validatedData = $request->validate([
             'quantity' => 'required|integer|in:'.implode(',', $accept_values),
         ]);
 
-        $this->seed($validatedData['quantity']);
+        $this->participant->seed($validatedData['quantity']);
 
         return response()->json([
             'success' => true,
@@ -75,12 +72,13 @@ class ParticipantController extends Controller
         ], 201);
     }
 
-    public function clear()
+    public function clear(): JsonResponse
     {
-        $participants = Participant::all();
+        $this->participant->clear();
 
-        foreach($participants as $participant) {
-            $participant->delete();
-        }
+        return response()->json([
+            'success' => true,
+            'message' => 'All participants deleted',
+        ], 200);
     }
 }

@@ -6,7 +6,7 @@ class NumericHelper
 {
     public static function isPowerOfTwo(int $number): bool
     {
-        return ($number & ($number - 1)) === 0;
+        return $number > 0 && ($number & ($number - 1)) === 0;
     }
 
     public static function generatePowersOfTwo(int $quantity): array

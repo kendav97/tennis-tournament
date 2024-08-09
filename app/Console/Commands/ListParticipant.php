@@ -3,30 +3,29 @@
 namespace App\Console\Commands;
 
 use App\Http\Controllers\ParticipantConsoleController;
-use App\Models\Participant;
 use Illuminate\Console\Command;
 
-class CreateParticipant extends Command
+class ListParticipant extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'participants:create';
+    protected $signature = 'participants:list';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Creates a new participant';
+    protected $description = 'Shows participants in table format';
 
     /**
      * Execute the console command.
      */
     public function handle(ParticipantConsoleController $participantController)
     {
-        return $participantController->create($this);
+        return $participantController->list($this);
     }
 }

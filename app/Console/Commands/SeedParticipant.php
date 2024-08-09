@@ -2,9 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\ParticipantController;
-use App\Http\Helpers\NumericHelper;
-use App\Models\Participant;
+use App\Http\Controllers\ParticipantConsoleController;
 use Illuminate\Console\Command;
 
 class SeedParticipant extends Command
@@ -26,19 +24,8 @@ class SeedParticipant extends Command
     /**
      * Execute the console command.
      */
-    public function handle(ParticipantController $participantController)
+    public function handle(ParticipantConsoleController $participantController)
     {
-        $options = NumericHelper::generatePowersOfTwo(ParticipantController::SEED_NUMBER_OPTIONS);
-
-        $number = $this->choice(
-            'How many participants do you want to create randomly?',
-            $options,
-        );
-
-        $participantController->seed($number);
-
-        $this->info("$number participants added successfully");
-
-        return Command::SUCCESS;
+        return $participantController->seed($this);
     }
 }

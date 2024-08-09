@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\GameController;
+use App\Http\Controllers\GameConsoleController;
 use Illuminate\Console\Command;
 
 class ReplayGame extends Command
@@ -24,12 +24,8 @@ class ReplayGame extends Command
     /**
      * Execute the console command.
      */
-    public function handle(GameController $gameController)
-    {
-        $gameController->reset();
-
-        $this->info("Game reseted successfully");
-        
-        return $gameController->consolePlay($this);
+    public function handle(GameConsoleController $gameController)
+    {   
+        return $gameController->replay($this);
     }
 }

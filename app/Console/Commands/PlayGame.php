@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Http\Controllers\GameController;
+use App\Http\Controllers\GameConsoleController;
 use Illuminate\Console\Command;
 
 class PlayGame extends Command
@@ -24,8 +24,8 @@ class PlayGame extends Command
     /**
      * Execute the console command.
      */
-    public function handle(GameController $gameController)
+    public function handle(GameConsoleController $gameController)
     {
-        return $gameController->consolePlay($this);
+        return $gameController->play($this);
     }
 }

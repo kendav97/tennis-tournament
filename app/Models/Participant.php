@@ -19,6 +19,8 @@ class Participant extends Model
     const MIN_SCORE = 0;
     const MAX_SCORE = 100;
 
+    const SEED_NUMBER_OPTIONS = 9;
+
     protected $fillable = [
         'name',
         'skill',
@@ -28,12 +30,19 @@ class Participant extends Model
         'is_defeated',
     ];
 
-    public function autoAdd(int $quantity = 2): Collection
+    public function seed(int $quantity = 2): Collection
     {
         if (!NumericHelper::isPowerOfTwo($quantity)) {
             throw new \InvalidArgumentException('The quantity must be a power of 2.');
         }
 
         return Participant::factory()->count($quantity)->create();
+    }
+
+    public function clear()
+    {
+        foreach(self::all() as $participant) {
+            $participant->delete();
+        }
     }
 }
