@@ -1,4 +1,4 @@
-# PHP Challenge
+# Tennis tournament
 
 <p align="left">
     <img src="https://img.shields.io/badge/Autor-Kenneth_Gonzalez-brightgreen?style=flat&logo=codementor&logoColor=%23959da5" alt="Autor">
@@ -60,16 +60,4 @@ Este es un desafío de PHP y laravel para demostrar mis habilidades como program
 
 ## API Reference
 
-<script src="https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui.min.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@latest/swagger-ui.css" />
-
-<div id="swagger-ui"></div>
-
-<script>
-    window.onload = function() {
-        const ui = SwaggerUI({
-            url: "https://raw.githubusercontent.com/kendav97/tennis-tournament/main/storage/api-docs/api-docs.json",
-            dom_id: '#swagger-ui',
-        });
-    }
-</script>
+After instalation open [localhost:8000/api/documentation](http://localhost:8000/api/documentation)
