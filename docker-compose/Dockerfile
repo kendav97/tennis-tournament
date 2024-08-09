@@ -1,5 +1,7 @@
 FROM php:8.3-fpm
 
+RUN useradd -m -u 1000 -s /bin/bash laravel
+
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -22,5 +24,7 @@ COPY ./docker-compose/php/entrypoint.sh /usr/src/app/
 RUN chmod +x /usr/src/app/entrypoint.sh
 
 CMD ["/usr/src/app/entrypoint.sh"]
+
+USER laravel
 
 EXPOSE 9000

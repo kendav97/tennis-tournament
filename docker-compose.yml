@@ -12,6 +12,10 @@ services:
       - ./:/var/www/
     networks:
       - tennis-tournament
+    environment:
+      - HOME=/home/laravel
+      - USER=laravel
+    user: "1000:1000"
 
   db:
     image: mysql:lts
