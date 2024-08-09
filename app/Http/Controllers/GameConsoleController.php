@@ -46,7 +46,12 @@ class GameConsoleController extends Controller
                 if (!$command->confirm('Do you want to proceed anyway?')) {
                     return Command::FAILURE;
                 }
-                $this->game->play($gender, true);
+                $result = $this->game->play($gender, true);
+
+                if (is_numeric($result)) {
+                    $command->error('The game crashed');
+                    return Command::FAILURE;
+                }
             }
         }
 

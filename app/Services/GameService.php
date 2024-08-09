@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Controllers\TournamentController;
 use App\Http\Helpers\NumericHelper;
 use App\Models\Participant;
 use Exception;
@@ -32,7 +33,9 @@ class GameService
             }
 
             if ($count == 1) {
-                return $participants->first();
+                $winner = $participants->first();
+                TournamentController::save($gender, $winner->id);
+                return $winner;
             }
 
             for ($i = 0; $i < ($count - 1); $i += 2) {

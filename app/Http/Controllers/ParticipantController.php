@@ -7,6 +7,15 @@ use App\Http\Helpers\NumericHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 
+/**
+* @OA\Info(
+*             title="API Tennis tournament", 
+*             version="1",
+*             description="Manage participants and play the game"
+* )
+*
+* @OA\Server(url="http://localhost:8000")
+*/
 class ParticipantController extends Controller
 {
     public function __construct(
@@ -14,6 +23,24 @@ class ParticipantController extends Controller
     )
     {}
 
+    /**
+     * Get all participants
+     * @OA\Get(
+     *     path="/api/v1/participants",
+     *     tags={"Participants"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="OK",
+     *         @OA\JsonContent(
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/Participant")   
+     *             )
+     *         )
+     *     )
+     * )
+     */
     public function index(Request $request): JsonResponse
     {
         $request->validate([
@@ -35,6 +62,37 @@ class ParticipantController extends Controller
         return response()->json($participants);
     }
 
+    /**
+     * Create a participant
+     *
+     * @OA\Post(
+     *     path="/api/v1/participants",
+     *     tags={"Participants"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="name", type="string", example="John Doe"),
+     *             @OA\Property(property="skill", type="integer", format="int32", example=50),
+     *             @OA\Property(property="strength", type="integer", format="int32", example=80),
+     *             @OA\Property(property="speed", type="integer", format="int32", example=70),
+     *             @OA\Property(property="reaction", type="integer", format="int32", example=90),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Participant created successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Participant created successfully"),
+     *             @OA\Property(property="participant", ref="#/components/schemas/Participant")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error"
+     *     )
+     * )
+     */
     public function create(Request $request): JsonResponse
     {
         $min_max = implode(',', [$this->participant::MIN_SCORE, $this->participant::MAX_SCORE]);
@@ -57,6 +115,32 @@ class ParticipantController extends Controller
         ], 201);
     }
 
+    /**
+     * Seed participants
+     *
+     * @OA\Post(
+     *     path="/api/v1/participants/seed",
+     *     tags={"Participants"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="quantity", type="integer", format="int32", example=64),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Participants seeded successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="64 participants created successfully")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error"
+     *     )
+     * )
+     */
     public function seed(Request $request): JsonResponse
     {
         $accept_values = NumericHelper::generatePowersOfTwo($this->participant::SEED_NUMBER_OPTIONS);
@@ -72,6 +156,18 @@ class ParticipantController extends Controller
         ], 201);
     }
 
+    /**
+     * Clear all participants
+     *
+     * @OA\Post(
+     *     path="/api/v1/participants/clear",
+     *     tags={"Participants"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="All participants deleted"
+     *     )
+     * )
+     */
     public function clear(): JsonResponse
     {
         $this->participant->clear();

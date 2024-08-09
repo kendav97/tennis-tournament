@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ParticipantController;
 use App\Http\Controllers\GameController;
+use App\Http\Controllers\TournamentController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -16,4 +17,7 @@ Route::prefix('v1')
         Route::post('game/play', [GameController::class, 'play']);
         Route::post('game/replay', [GameController::class, 'replay']);
         Route::post('game/reset', [GameController::class, 'reset']);
+
+
+        Route::get('tournaments', [TournamentController::class, 'index']);
     });

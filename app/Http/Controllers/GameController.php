@@ -12,6 +12,37 @@ class GameController extends Controller
     )
     {}
 
+    /**
+     * Play a game
+     *
+     * @OA\Post(
+     *     path="/api/v1/game/play",
+     *     tags={"Game"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="gender", type="string", enum={"male", "female"}),
+     *             @OA\Property(property="force", type="boolean", default=false)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Game played successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The winner is John Doe with id = 123"),
+     *             @OA\Property(property="success", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
+     *     )
+     * )
+     */
     public function play(Request $request)
     {
         $validatedData = $request->validate([
@@ -50,6 +81,22 @@ class GameController extends Controller
         ], 200);
     }
 
+    /**
+     * Reset the game
+     *
+     * @OA\Post(
+     *     path="/api/v1/game/reset",
+     *     tags={"Game"},
+     *     @OA\Response(
+     *         response=200,
+     *         description="Game reseted successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Game reseted successfully"),
+     *             @OA\Property(property="success", type="boolean", example=true)
+     *         )
+     *     )
+     * )
+     */
     public function reset()
     {
         $this->game->reset();
@@ -60,6 +107,37 @@ class GameController extends Controller
         ], 200);
     }
 
+    /**
+     * Replay the game
+     *
+     * @OA\Post(
+     *     path="/api/v1/game/replay",
+     *     tags={"Game"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             @OA\Property(property="gender", type="string", enum={"male", "female"}),
+     *             @OA\Property(property="force", type="boolean", default=false)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Game replayed successfully",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The winner is John Doe with id = 123"),
+     *             @OA\Property(property="success", type="boolean", example=true)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=400,
+     *         description="Validation error"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
+     *     )
+     * )
+     */
     public function replay(Request $request)
     {
         $this->reset();

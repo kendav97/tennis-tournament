@@ -9,6 +9,8 @@ use Tests\TestCase;
 
 class GameTest extends TestCase
 {
+    use RefreshDatabase, WithFaker;
+    
     public function test_can_play_game_with_winner()
     {
         $this->postJson('api/v1/participants/clear');
