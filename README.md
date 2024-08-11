@@ -8,12 +8,13 @@
 This is a PHP and Laravel challenge to demonstrate my programming skills, based on [this](https://drive.google.com/file/d/1wUdBGiFPKeFgMG-BajIgF5SHFmS6O57A/view?usp=sharing) requirement.
 
 ## Tabla de contenidos  
-1. [Introduction](#php-challenge)
-2. [Pre requisites](#pre-requisitos)
-3. [Local installation](#ejecutar-en-entorno-local)
-4. [API Reference](#api-reference)
+1. [Introduction](#tennis-tournament)
+2. [Pre requisites](#pre-requisites)
+3. [Local installation](#local-installation)
+4. [Console commands](#console-commands)
+5. [API Reference](#api-reference)
 
-## Pre requisitos
+## Pre requisites
 
 - Have docker installed
 
@@ -56,6 +57,50 @@ This is a PHP and Laravel challenge to demonstrate my programming skills, based 
 - And finally, run the tests
   ~~~bash
   php artisan test
+  ~~~
+
+## Console commands
+
+- Create a participant allowing you to enter each of its properties: Name, ability, strength, speed and reaction.
+
+  ~~~bash
+  php artisan participants:create
+  ~~~
+
+- Lists all participants and their properties in table format.
+
+  ~~~bash
+  php artisan participants:list
+  ~~~
+
+- Insert the chosen number of participants into the database.
+
+  ~~~bash
+  php artisan participants:seed
+  ~~~
+
+- Eliminate all participants.
+
+  ~~~bash
+  php artisan participants:clear
+  ~~~
+
+- Start the game, asking for the gender first, calculating and returning the winner.
+
+  ~~~bash
+  php artisan game:play
+  ~~~
+
+- Returns all participants to the initial state, leaving them ready to run the game again.
+
+  ~~~bash
+  php artisan game:reset
+  ~~~
+
+- Restart the game and after choosing the genre, play it again, returning the winner.
+
+  ~~~bash
+  php artisan game:replay
   ~~~
 
 ## API Reference
